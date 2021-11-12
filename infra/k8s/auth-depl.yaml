@@ -22,7 +22,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-matadata:
+metadata:
   name: auth-srv
 spec:
   selector:
