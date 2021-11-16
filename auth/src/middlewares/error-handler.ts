@@ -12,10 +12,10 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   }
 
   if (err instanceof DatabaseConnectionError) {
-    return res.status(500).send({ errors: err.reason })
+    return res.status(500).send({ errors: [{ message: err.reason }] })
   }
 
   res.status(400).send({
-    messages: err.message
+    errors: [{ message: 'Something went wrong!' }]
   });
 };
