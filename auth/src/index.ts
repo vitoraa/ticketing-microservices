@@ -7,9 +7,15 @@ import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import mongoose from 'mongoose'
+import cookieSession from 'cookie-session';
 
 const app = express();
+app.settings('trust proxy', true);
 app.use(express.json());
+app.use(cookieSession({
+  signed: false,
+  secure: true,
+}));
 
 app.use(currentUserRouter);
 app.use(signinRouter);
