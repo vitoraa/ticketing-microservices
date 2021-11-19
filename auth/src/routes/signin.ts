@@ -4,6 +4,8 @@ import { BadRequestError } from '../errors/bad-request-error';
 import { validateRequest } from '../middlewares/validate-request';
 import { User } from '../models/user';
 import { Password } from '../services/password';
+import jwt from 'jsonwebtoken';
+import { environment } from '../environment';
 
 const router = express.Router();
 
@@ -30,6 +32,15 @@ router.post('/api/users/signin', [
   if (!passwordMatch) {
     throw new BadRequestError('Invalid credentials');
   }
+
+  const userJwt = jwt.sign({
+    id: existingUser.id,
+    email: existingUser.email
+  }, environment.jwt_key);
+
+  req.session = { jwt: userJwt };
+
+  res.status(200).send(existingUser);
 });
 
 export { router as signinRouter };
