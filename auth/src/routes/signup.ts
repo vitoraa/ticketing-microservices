@@ -4,6 +4,7 @@ import { BadRequestError } from '../errors/bad-request-error';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { User } from '../models/user';
 import jwt from 'jsonwebtoken';
+import { environment } from '../environment';
 
 const router = express.Router();
 
@@ -36,7 +37,7 @@ router.post('/api/users/signup', [
     const userJwt = jwt.sign({
       id: user.id,
       email: user.email
-    }, 'asdf');
+    }, environment.jwt_key);
 
     req.session = { jwt: userJwt };
 
