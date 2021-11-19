@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 let mongo: any;
 
+jest.setTimeout(15000);
+
 beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
