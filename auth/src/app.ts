@@ -7,13 +7,14 @@ import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import cookieSession from 'cookie-session';
+import { environment } from './environment';
 
 const app = express();
 app.set('trust proxy', true);
 app.use(express.json());
 app.use(cookieSession({
   signed: false,
-  secure: true,
+  secure: environment.node_env !== 'test',
 }));
 
 app.use(currentUserRouter);
