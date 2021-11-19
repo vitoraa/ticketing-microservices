@@ -20,3 +20,25 @@ test('should returns 400 with invalid email', async () => {
     })
     .expect(400);
 });
+
+test('should returns 400 with invalid password', async () => {
+  return request(app)
+    .post('/api/users/signup')
+    .send({
+      email: 'email@email',
+      password: 'pas',
+    })
+    .expect(400);
+});
+
+test('should returns 400 with missing email and password', async () => {
+  await request(app)
+    .post('/api/users/signup')
+    .send({ email: 'email@email' })
+    .expect(400);
+
+  await request(app)
+    .post('/api/users/signup')
+    .send({ password: 'password' })
+    .expect(400);
+});
