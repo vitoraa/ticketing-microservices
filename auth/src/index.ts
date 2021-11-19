@@ -10,7 +10,7 @@ import mongoose from 'mongoose'
 import cookieSession from 'cookie-session';
 
 const app = express();
-app.settings('trust proxy', true);
+app.set('trust proxy', true);
 app.use(express.json());
 app.use(cookieSession({
   signed: false,
