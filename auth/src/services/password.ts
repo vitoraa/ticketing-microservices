@@ -6,6 +6,6 @@ export class Password {
   }
 
   static async compare (storedPassword: string, suppliedPassword: string) {
-    return await bcrypt.compare(storedPassword, suppliedPassword);
+    return await bcrypt.compare(suppliedPassword, storedPassword);
   }
 }
