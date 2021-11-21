@@ -29,3 +29,20 @@ test('should returns 400 if email not exist', async () => {
     .expect(400);
 });
 
+test('should returns 400 when incorrect password is supplied', async () => {
+  await request(app)
+    .post('/api/users/signup')
+    .send({
+      email: 'email@email.com',
+      password: 'password',
+    })
+    .expect(201);
+
+  await request(app)
+    .post('/api/users/signin')
+    .send({
+      email: 'email@email.com',
+      password: 'password_wrong',
+    })
+    .expect(400);
+});
