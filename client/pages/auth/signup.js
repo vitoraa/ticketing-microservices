@@ -1,9 +1,18 @@
+import { useState } from "react";
+
 const signUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    console.log(email, password);
+  };
+
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <div className="form-group">
         <label>Email address</label>
         <input value={email} onChange={e => setEmail(e.target.value)} className="form-control" />
