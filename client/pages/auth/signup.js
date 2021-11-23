@@ -30,12 +30,12 @@ const signUp = () => {
         <label>Password</label>
         <input value={password} onChange={e => setPassword(e.target.value)} type='password' className="form-control" />
       </div>
-      <div className="alert alert-danger">
+      {errors.length > 0 && <div className="alert alert-danger">
         <h4>Oooops....</h4>
         <ul className="my-0">
           {errors.map(err => <li key={err.message}>{err.message}</li>)}
         </ul>
-      </div>
+      </div>}
       <button type="submit" className="btn btn-primary">
         Sign Up
       </button>
