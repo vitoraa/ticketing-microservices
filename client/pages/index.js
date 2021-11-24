@@ -1,4 +1,3 @@
-import axios from "axios";
 import buildClient from "../api/build-client";
 
 const index = ({ currentUser }) => {
@@ -7,7 +6,8 @@ const index = ({ currentUser }) => {
 };
 
 index.getInitialProps = async (context) => {
-  const { data } = await buildClient(context).get('/api/users/current_user');
+  const client = buildClient(context);
+  const { data } = await client.get('/api/users/current_user');
   return data;
 }
 
