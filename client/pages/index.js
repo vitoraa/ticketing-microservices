@@ -1,14 +1,18 @@
 import axios from "axios";
 
-const index = (data) => {
-  console.log(data);
+const index = ({ currentUser }) => {
+  console.log(currentUser);
   return <h1>Teste</h1>;
 };
 
 index.getInitialProps = async () => {
-  const response = await axios.get('/api/users/current_user');
-  console.log(response);
-  return response.data
+  if (typeof window === 'undefined') {
+    const response = await axios.get('/api/users/current_user');
+    console.log(response);
+  } else {
+    const { data } = await axios.get('/api/users/current_user');
+    return data
+  }
 }
 
 export default index;
