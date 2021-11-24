@@ -7,12 +7,19 @@ const index = ({ currentUser }) => {
 
 index.getInitialProps = async () => {
   if (typeof window === 'undefined') {
-    const response = await axios.get('/api/users/current_user');
-    console.log(response);
+    const { data } = await axios.get('http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/current_user', {
+      headers: {
+        Host: 'ticket.com'
+      }
+    });
+    console.log(data)
+    return data;
   } else {
     const { data } = await axios.get('/api/users/current_user');
-    return data
+    return data;
   }
+
+  return {};
 }
 
 export default index;
