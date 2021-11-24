@@ -5,12 +5,11 @@ const index = ({ currentUser }) => {
   return <h1>Teste</h1>;
 };
 
-index.getInitialProps = async () => {
+index.getInitialProps = async ({ req }) => {
+  console.log(req.headers);
   if (typeof window === 'undefined') {
     const { data } = await axios.get('http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/current_user', {
-      headers: {
-        Host: 'ticket.com'
-      }
+      headers: req.headers
     });
     console.log(data)
     return data;
