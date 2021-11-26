@@ -1,7 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
-import { NotFoundError } from '@vitoraatickets/common';
-import { errorHandler } from '@vitoraatickets/common';
+import { NotFoundError, errorHandler } from '@vitoraatickets/common';
 import { currentUserRouter } from './routes/current-user'
 import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
