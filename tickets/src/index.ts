@@ -1,10 +1,11 @@
 import 'express-async-errors';
 import mongoose from 'mongoose'
 import { app } from './app';
+import { environment } from './environment';
 
 const start = async () => {
   try {
-    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
+    await mongoose.connect(environment.mongo_uri);
     console.log('Connected to MongoDB')
   } catch (err) {
     console.log(err)
