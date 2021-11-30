@@ -47,7 +47,23 @@ test('should return an error if an invalid title is provided', async () => {
 });
 
 test('should return an error if an invalid price is provided', async () => {
+  const cookie = global.signin();
+  await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'Title 1',
+      price: -10,
+    })
+    .expect(400);
 
+  await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'Title 2',
+    })
+    .expect(400);
 });
 
 test('should create a ticket with valid inputs', async () => {
