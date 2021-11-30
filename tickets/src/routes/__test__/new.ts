@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/api/tickets', requireAuth,
   [body('title')
     .isString()
+    .notEmpty()
   ], validateRequest, (req: Request, res: Response) => {
     res.send({});
   });
