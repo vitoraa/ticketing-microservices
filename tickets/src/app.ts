@@ -1,6 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
-import { NotFoundError, errorHandler } from '@vitoraatickets/common';
+import { NotFoundError, errorHandler, currentUser } from '@vitoraatickets/common';
 import cookieSession from 'cookie-session';
 import { environment } from './environment';
 import { createTicketRouter } from './routes/__test__/new';
@@ -13,6 +13,7 @@ app.use(cookieSession({
   secure: environment.node_env !== 'test',
 }));
 
+app.use(currentUser);
 app.use(createTicketRouter);
 
 app.all('*', async () => {
