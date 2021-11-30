@@ -16,6 +16,16 @@ test('should only be accessed if the user is signed in', async () => {
     .expect(401);
 });
 
+test('should returns status other than 401 if the user is signed in', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({})
+
+  expect(response.status).not.toEqual(401);
+});
+
 test('should return an error if an invalid title is provided', async () => {
 
 });
