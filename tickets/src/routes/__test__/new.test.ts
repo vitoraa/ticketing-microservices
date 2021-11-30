@@ -27,7 +27,23 @@ test('should returns status other than 401 if the user is signed in', async () =
 });
 
 test('should return an error if an invalid title is provided', async () => {
+  const cookie = global.signin();
+  await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: '',
+      price: 10,
+    })
+    .expect(400);
 
+  await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      price: 10,
+    })
+    .expect(400);
 });
 
 test('should return an error if an invalid price is provided', async () => {
