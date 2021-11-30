@@ -6,4 +6,4 @@ router.post('/api/tickets', (req, res) => {
   res.send({});
 });
 
-export { router as newTicketRouter };
+export { router as createTicketRouter };
