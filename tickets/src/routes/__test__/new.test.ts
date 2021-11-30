@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 
-test('should has a route handler listening to api/tickets for post request', async () => {
+test('should have a route handler listening to api/tickets for post request', async () => {
   const response = await request(app)
     .post('/api/tickets')
     .send({})
@@ -10,7 +10,10 @@ test('should has a route handler listening to api/tickets for post request', asy
 });
 
 test('should only be accessed if the user is signed in', async () => {
-
+  const response = await request(app)
+    .post('/api/tickets')
+    .send({})
+    .expect(401);
 });
 
 test('should return an error if an invalid title is provided', async () => {
