@@ -10,7 +10,7 @@ test('should have a route handler listening to api/tickets for post request', as
 });
 
 test('should only be accessed if the user is signed in', async () => {
-  const response = await request(app)
+  await request(app)
     .post('/api/tickets')
     .send({})
     .expect(401);
