@@ -3,6 +3,7 @@ import 'express-async-errors';
 import { NotFoundError, errorHandler } from '@vitoraatickets/common';
 import cookieSession from 'cookie-session';
 import { environment } from './environment';
+import { newTicketRouter } from './routes/__test__/new';
 
 const app = express();
 app.set('trust proxy', true);
@@ -11,6 +12,8 @@ app.use(cookieSession({
   signed: false,
   secure: environment.node_env !== 'test',
 }));
+
+app.use(newTicketRouter);
 
 app.all('*', async () => {
   throw new NotFoundError()
