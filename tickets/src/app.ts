@@ -3,7 +3,7 @@ import 'express-async-errors';
 import { NotFoundError, errorHandler, currentUser } from '@vitoraatickets/common';
 import cookieSession from 'cookie-session';
 import { environment } from './environment';
-import { createTicketRouter } from './routes/__test__/new';
+import { createTicketRouter } from './routes/new';
 
 const app = express();
 app.set('trust proxy', true);

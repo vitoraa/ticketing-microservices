@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { requireAuth, validateRequest } from '@vitoraatickets/common'
 import { body } from 'express-validator';
-import { Ticket } from '../../models/ticket';
+import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
