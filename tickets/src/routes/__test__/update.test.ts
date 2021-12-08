@@ -73,3 +73,27 @@ test('should return 400 if the user provides an invalid title or price', async (
     })
     .expect(400);
 });
+
+test('should return 200 if update ticket', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'title 1',
+      price: 20,
+    })
+    .expect(201);
+
+  const ticketResponse = await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'title 2',
+      price: 40,
+    })
+    .expect(200);
+
+  expect(ticketResponse.body.title).toEqual('title 2');
+  expect(ticketResponse.body.price).toEqual(40);
+});
