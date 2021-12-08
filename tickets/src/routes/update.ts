@@ -1,4 +1,4 @@
-import { NotFoundError, requireAuth } from '@vitoraatickets/common';
+import { NotAuthorizedError, NotFoundError, requireAuth } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
 import { Ticket } from '../models/ticket';
 
@@ -11,6 +11,12 @@ router.put('/api/tickets/:id', requireAuth, async (req: Request, res: Response) 
   if (!ticket) {
     throw new NotFoundError();
   }
+
+  if (ticket.userId !== req.currentUser!.id) {
+    throw new NotAuthorizedError();
+  }
+
+  res.send(ticket);
 });
 
 export { router as updateTicketRouter };
