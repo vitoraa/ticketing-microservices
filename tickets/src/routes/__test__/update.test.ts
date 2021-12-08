@@ -85,7 +85,7 @@ test('should return 200 if update ticket', async () => {
     })
     .expect(201);
 
-  const ticketResponse = await request(app)
+  await request(app)
     .put(`/api/tickets/${response.body.id}`)
     .set('Cookie', cookie)
     .send({
@@ -93,6 +93,10 @@ test('should return 200 if update ticket', async () => {
       price: 40,
     })
     .expect(200);
+
+  const ticketResponse = await request(app)
+    .get(`/api/tickets/${response.body.id}`)
+    .send();
 
   expect(ticketResponse.body.title).toEqual('title 2');
   expect(ticketResponse.body.price).toEqual(40);
