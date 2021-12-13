@@ -3,7 +3,10 @@ import 'express-async-errors';
 import { NotFoundError, errorHandler, currentUser } from '@vitoraatickets/common';
 import cookieSession from 'cookie-session';
 import { environment } from './environment';
-import { indexOrdersRouter } from './routes';
+import { indexOrderRouter } from './routes/index';
+import { deleteOrderRouter } from './routes/delete';
+import { newOrderRouter } from './routes/new';
+import { showOrderRouter } from './routes/show';
 
 const app = express();
 app.set('trust proxy', true);
@@ -14,7 +17,10 @@ app.use(cookieSession({
 }));
 
 app.use(currentUser);
-app.use(indexOrdersRouter);
+app.use(indexOrderRouter);
+app.use(deleteOrderRouter);
+app.use(newOrderRouter);
+app.use(showOrderRouter);
 
 app.all('*', async () => {
   throw new NotFoundError()
