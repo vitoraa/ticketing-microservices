@@ -6,7 +6,7 @@ import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
   try {
-    await natsWrapper.connect('ticketing', 'hcsbscv', 'http://nats-srv:4222');
+    await natsWrapper.connect(environment.nats_cluster_id, environment.nats_client_id, environment.nats_url);
     natsWrapper.client.on('close', () => {
       console.log('NATS connection closed!');
       process.exit();
