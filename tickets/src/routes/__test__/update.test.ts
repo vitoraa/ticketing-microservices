@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
+import { Subjects } from '@vitoraatickets/common';
 
 test('should return 404 if the id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -100,4 +102,27 @@ test('should return 200 if update ticket', async () => {
 
   expect(ticketResponse.body.title).toEqual('title 2');
   expect(ticketResponse.body.price).toEqual(40);
+});
+
+test('publishes an event', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'title 1',
+      price: 20,
+    })
+    .expect(201);
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'title 2',
+      price: 40,
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenLastCalledWith(Subjects.TicketUpdated, expect.anything(), expect.anything());
 });
