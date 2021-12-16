@@ -1,4 +1,4 @@
-import { NotFoundError, requireAuth } from '@vitoraatickets/common';
+import { NotFoundError, OrderStatus, requireAuth } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
 import { Order } from '../models/order';
 
@@ -13,7 +13,10 @@ router.delete('/api/orders/:orderId', requireAuth, async (req: Request, res: Res
     throw new NotFoundError();
   }
 
-  res.send({});
+  order.set({ status: OrderStatus.Cancelled });
+  await order.save()
+
+  res.send(order);
 });
 
 export { router as deleteOrderRouter };
