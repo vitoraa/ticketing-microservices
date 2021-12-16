@@ -1,10 +1,14 @@
 import { requireAuth } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
+import { Order } from '../models/order';
 
 const router = express.Router();
 
 router.get('/api/orders/:orderId', requireAuth, async (req: Request, res: Response) => {
-  res.send({});
+  const orderId = req.params.orderId;
+  const userId = req.currentUser!.id;
+  const order = await Order.findOne({ userId, id: orderId }).populate('ticket');
+  res.status(200).send(order);
 });
 
 export { router as showOrderRouter };
