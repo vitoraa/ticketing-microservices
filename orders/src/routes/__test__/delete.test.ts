@@ -36,3 +36,30 @@ test('should return 404 if the order does not exist or not authorized', async ()
 
   expect(response.status).toEqual(404);
 });
+
+test('should return error 404 if user try to delete order of another user', async () => {
+  const user1 = global.signin();
+  const user2 = global.signin();
+
+  const ticket = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket.save();
+
+  const { body: orderOne } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', user1)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  const response = await request(app)
+    .delete(`/api/orders/${orderOne.id}`)
+    .set('Cookie', user2)
+    .send({})
+
+
+  expect(response.status).toEqual(404);
+});
