@@ -25,3 +25,20 @@ test('should returns status other than 401 if the user is signed in', async () =
 
   expect(response.status).not.toEqual(401);
 });
+
+test('should return an error if an invalid order is provided', async () => {
+  const cookie = global.signin();
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({
+      ticketId: '',
+    })
+    .expect(400);
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({})
+    .expect(400);
+});
