@@ -18,3 +18,13 @@ test('should only be accessed if the user is signed in', async () => {
     .send({})
     .expect(401);
 });
+
+test('should returns status other than 401 if the user is signed in', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+    .get('/api/orders')
+    .set('Cookie', cookie)
+    .send({})
+
+  expect(response.status).not.toEqual(401);
+});
