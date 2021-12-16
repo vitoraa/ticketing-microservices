@@ -79,3 +79,19 @@ test('should return an error if the ticket is already reserved', async () => {
     })
     .expect(400);
 });
+
+test('should reserve a ticket', async () => {
+  const ticket = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+});
