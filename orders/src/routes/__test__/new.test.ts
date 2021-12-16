@@ -8,3 +8,10 @@ test('should have a route handler listening to api/orders for post request', asy
 
   expect(response.status).not.toEqual(404);
 });
+
+test('should only be accessed if the user is signed in', async () => {
+  await request(app)
+    .post('/api/orders')
+    .send({})
+    .expect(401);
+});
