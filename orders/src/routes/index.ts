@@ -1,8 +1,9 @@
+import { requireAuth } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
 
 const router = express.Router();
 
-router.get('/api/orders', async (req: Request, res: Response) => {
+router.get('/api/orders', requireAuth, async (req: Request, res: Response) => {
   res.send({});
 });
 
