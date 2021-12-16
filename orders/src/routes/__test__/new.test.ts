@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { Order, OrderStatus } from '../../models/order';
+import { Ticket } from '../../models/ticket';
 
 test('should have a route handler listening to api/orders for post request', async () => {
   const response = await request(app)
@@ -52,4 +54,28 @@ test('should return an error if the ticket does not exist', async () => {
       ticketId: new mongoose.Types.ObjectId(),
     })
     .expect(404);
+});
+
+test('should return an error if the ticket is already reserved', async () => {
+  const ticket = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket.save();
+
+  const order = Order.build({
+    ticket,
+    status: OrderStatus.Complete,
+    userId: 'user1',
+    expiresAt: new Date()
+  });
+  await order.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(400);
 });
