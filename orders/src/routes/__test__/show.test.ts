@@ -94,3 +94,30 @@ test('should return the order of the user', async () => {
   expect(response.body.ticket.title).toEqual('Title 1');
   expect(response.body.ticket.price).toEqual(10);
 });
+
+test('should return error 404 if user try to get order of another user', async () => {
+  const user1 = global.signin();
+  const user2 = global.signin();
+
+  const ticket = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket.save();
+
+  const { body: orderOne } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', user1)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  const response = await request(app)
+    .get(`/api/orders/${orderOne.id}`)
+    .set('Cookie', user2)
+    .send({})
+
+
+  expect(response.status).toEqual(404);
+});
