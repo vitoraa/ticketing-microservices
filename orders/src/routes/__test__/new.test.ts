@@ -94,4 +94,8 @@ test('should reserve a ticket', async () => {
       ticketId: ticket.id,
     })
     .expect(201);
+
+  const orderFound = await Order.findOne({ ticket: ticket.id });
+  expect(orderFound).toBeTruthy();
+  expect(orderFound!.status).toEqual(OrderStatus.Created);
 });
