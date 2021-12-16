@@ -33,7 +33,7 @@ router.post('/api/orders', requireAuth, [
   });
 
   if (existingOrder) {
-    throw new BadRequestError();
+    throw new BadRequestError('Ticket is already reserved');
   }
 
   res.send({});
