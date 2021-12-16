@@ -13,7 +13,7 @@ router.delete('/api/orders/:orderId', requireAuth, async (req: Request, res: Res
     throw new NotFoundError();
   }
 
-  order.set({ status: OrderStatus.Cancelled });
+  order.status = OrderStatus.Cancelled;
   await order.save()
 
   res.send(order);
