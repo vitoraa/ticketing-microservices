@@ -28,3 +28,43 @@ test('should returns status other than 401 if the user is signed in', async () =
 
   expect(response.status).not.toEqual(401);
 });
+
+test('should return the orders of the user', async () => {
+  const cookie = global.signin();
+
+  const ticket = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket.save();
+
+  const ticket2 = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket2.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({
+      ticketId: ticket2.id,
+    })
+    .expect(201);
+
+  const response = await request(app)
+    .get('/api/orders')
+    .set('Cookie', cookie)
+    .send({})
+
+  expect(response.status).toEqual(200);
+  expect(response.body.length).toEqual(2);
+});
