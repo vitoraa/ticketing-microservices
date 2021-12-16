@@ -30,7 +30,8 @@ test('should returns status other than 401 if the user is signed in', async () =
 });
 
 test('should return the orders of the user', async () => {
-  const cookie = global.signin();
+  const user1 = global.signin();
+  const user2 = global.signin();
 
   const ticket = Ticket.build({
     price: 10,
@@ -44,9 +45,15 @@ test('should return the orders of the user', async () => {
   });
   await ticket2.save();
 
+  const ticket3 = Ticket.build({
+    price: 10,
+    title: 'Title 1'
+  });
+  await ticket3.save();
+
   await request(app)
     .post('/api/orders')
-    .set('Cookie', cookie)
+    .set('Cookie', user1)
     .send({
       ticketId: ticket.id,
     })
@@ -54,15 +61,23 @@ test('should return the orders of the user', async () => {
 
   await request(app)
     .post('/api/orders')
-    .set('Cookie', cookie)
+    .set('Cookie', user1)
     .send({
       ticketId: ticket2.id,
     })
     .expect(201);
 
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', user2)
+    .send({
+      ticketId: ticket3.id,
+    })
+    .expect(201);
+
   const response = await request(app)
     .get('/api/orders')
-    .set('Cookie', cookie)
+    .set('Cookie', user1)
     .send({})
 
   expect(response.status).toEqual(200);
