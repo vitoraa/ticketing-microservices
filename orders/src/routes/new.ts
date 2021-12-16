@@ -1,7 +1,8 @@
-import { BadRequestError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@vitoraatickets/common';
+import { BadRequestError, NotFoundError, requireAuth, validateRequest } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
+import { Order, OrderStatus } from '../models/order';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
@@ -31,7 +32,15 @@ router.post('/api/orders', requireAuth, [
   const expiration = new Date();
   expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
-  res.send({});
+  const order = Order.build({
+    userId: req.currentUser!.id,
+    status: OrderStatus.Created,
+    expiresAt: expiration,
+    ticket
+  });
+  await order.save();
+
+  res.status(201).send(order);
 });
 
 export { router as newOrderRouter };
