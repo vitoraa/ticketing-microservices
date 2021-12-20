@@ -1,6 +1,7 @@
 import { OrderStatus } from '@vitoraatickets/common';
 import mongoose from 'mongoose';
 import { TicketDoc } from './ticket';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 export { OrderStatus };
 
@@ -23,7 +24,7 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
   build (attrs: OrderAttrs): OrderDoc;
 }
 
-const OrderSchema = new mongoose.Schema(
+const orderSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
@@ -53,10 +54,13 @@ const OrderSchema = new mongoose.Schema(
   }
 );
 
-OrderSchema.statics.build = (attrs: OrderAttrs) => {
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
+
+orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
 };
 
-const Order = mongoose.model<OrderDoc, OrderModel>('Order', OrderSchema);
+const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema);
 
 export { Order };
