@@ -2,6 +2,7 @@ import { Listener, Subjects, OrderCreatedEvent, NotFoundError } from "@vitoraati
 import { Message } from "node-nats-streaming";
 import { environment } from "../../environment";
 import { Ticket } from "../../models/ticket";
+import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher';
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent>{
   readonly subject = Subjects.OrderCreated;
@@ -17,6 +18,15 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent>{
 
     ticketFound.set({ orderId: id });
     await ticketFound.save();
+
+    await new TicketUpdatedPublisher(this.client).publish({
+      id: ticketFound.id,
+      price: ticketFound.price,
+      title: ticketFound.title,
+      userId: ticketFound.userId,
+      orderId: ticketFound.orderId,
+      version: ticketFound.version
+    });
 
     msg.ack();
   }
