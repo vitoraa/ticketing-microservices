@@ -33,3 +33,10 @@ test('should create and save a ticket', async () => {
   expect(ticket).toBeDefined();
   expect(ticket!.title).toEqual(data.title);
 });
+
+test('should call msg.ack', async () => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
