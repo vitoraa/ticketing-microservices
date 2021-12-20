@@ -1,6 +1,15 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
+import mongoose from 'mongoose';
+
+const createTicket = (price: number = 10, title: string = 'Title 1') => {
+  return Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    price,
+    title
+  })
+};
 
 test('should have a route handler listening to api/orders for get request', async () => {
   const response = await request(app)
@@ -41,22 +50,13 @@ test('should return the order of the user', async () => {
   const user1 = global.signin();
   const user2 = global.signin();
 
-  const ticket = Ticket.build({
-    price: 10,
-    title: 'Title 1'
-  });
+  const ticket = createTicket();
   await ticket.save();
 
-  const ticket2 = Ticket.build({
-    price: 20,
-    title: 'Title 2'
-  });
+  const ticket2 = createTicket(20, 'Title 2');
   await ticket2.save();
 
-  const ticket3 = Ticket.build({
-    price: 30,
-    title: 'Title 3'
-  });
+  const ticket3 = createTicket(30, 'Title 3');
   await ticket3.save();
 
   const { body: orderOne } = await request(app)
@@ -99,10 +99,7 @@ test('should return error 404 if user try to get order of another user', async (
   const user1 = global.signin();
   const user2 = global.signin();
 
-  const ticket = Ticket.build({
-    price: 10,
-    title: 'Title 1'
-  });
+  const ticket = createTicket();
   await ticket.save();
 
   const { body: orderOne } = await request(app)

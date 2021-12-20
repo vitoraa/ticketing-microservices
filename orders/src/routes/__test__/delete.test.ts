@@ -3,6 +3,15 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import { natsWrapper } from '../../nats-wrapper';
+import mongoose from 'mongoose';
+
+const createTicket = () => {
+  return Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    price: 10,
+    title: 'Title 1'
+  })
+};
 
 test('should have a route handler listening to api/orders for delete request', async () => {
   const response = await request(app)
@@ -43,10 +52,7 @@ test('should return error 404 if user try to delete order of another user', asyn
   const user1 = global.signin();
   const user2 = global.signin();
 
-  const ticket = Ticket.build({
-    price: 10,
-    title: 'Title 1'
-  });
+  const ticket = createTicket();
   await ticket.save();
 
   const { body: orderOne } = await request(app)
@@ -69,10 +75,7 @@ test('should return error 404 if user try to delete order of another user', asyn
 test('should change order status of order to Cancelled', async () => {
   const user1 = global.signin();
 
-  const ticket = Ticket.build({
-    price: 10,
-    title: 'Title 1'
-  });
+  const ticket = createTicket();
   await ticket.save();
 
   const { body: orderOne } = await request(app)
@@ -96,10 +99,7 @@ test('should change order status of order to Cancelled', async () => {
 test('should publish an event', async () => {
   const user1 = global.signin();
 
-  const ticket = Ticket.build({
-    price: 10,
-    title: 'Title 1'
-  });
+  const ticket = createTicket();
   await ticket.save();
 
   const { body: orderOne } = await request(app)
