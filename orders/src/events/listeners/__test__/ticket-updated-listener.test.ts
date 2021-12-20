@@ -41,4 +41,12 @@ test('should update the ticket', async () => {
   expect(ticketFound).toBeDefined();
   expect(ticketFound!.title).toEqual(data.title);
   expect(ticketFound!.price).toEqual(data.price);
+  expect(ticketFound!.version).toEqual(data.version);
+});
+
+test('should call msg.ack', async () => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
 });
