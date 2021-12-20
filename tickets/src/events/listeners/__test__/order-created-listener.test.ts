@@ -44,3 +44,10 @@ test('should update the ticket', async () => {
   expect(ticketUpdated).toBeDefined();
   expect(ticketUpdated!.orderId).toEqual(data.id);
 });
+
+test('should call msg.ack', async () => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
