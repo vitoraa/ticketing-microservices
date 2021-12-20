@@ -50,3 +50,12 @@ test('should call msg.ack', async () => {
 
   expect(msg.ack).toHaveBeenCalled();
 });
+
+test('should not call msg.ack if version is wrong', async () => {
+  const { listener, data, msg } = await setup();
+  data.version = 3;
+  const promisse = listener.onMessage(data, msg);
+
+  await expect(promisse).rejects.toThrow();
+  expect(msg.ack).not.toHaveBeenCalled();
+});
