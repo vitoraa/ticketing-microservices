@@ -48,3 +48,10 @@ test('should call msg.ack', async () => {
 
   expect(msg.ack).toHaveBeenCalled();
 });
+
+test('publishes an event', async () => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
