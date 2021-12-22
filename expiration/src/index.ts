@@ -1,4 +1,3 @@
-import 'express-async-errors';
 import { environment } from './environment';
 import { natsWrapper } from './nats-wrapper';
 
