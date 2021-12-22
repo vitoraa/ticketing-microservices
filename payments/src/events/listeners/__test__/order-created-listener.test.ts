@@ -37,3 +37,10 @@ test('should create and save an Order', async () => {
   expect(order).toBeDefined();
   expect(order!.price).toEqual(data.ticket.price);
 });
+
+test('should call msg.ack', async () => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
