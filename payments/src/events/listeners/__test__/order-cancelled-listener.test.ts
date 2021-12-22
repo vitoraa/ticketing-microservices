@@ -42,3 +42,10 @@ test('should update the Order as cancelled', async () => {
   expect(order).toBeDefined();
   expect(order!.status).toEqual(OrderStatus.Cancelled);
 });
+
+test('should call msg.ack', async () => {
+  const { listener, data, msg } = await setup();
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
