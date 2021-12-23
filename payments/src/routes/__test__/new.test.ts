@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { Order } from '../../models/order';
+import { OrderStatus } from '@vitoraatickets/common';
 
 test('should have a route handler listening to api/payments for post request', async () => {
   const response = await request(app)
@@ -64,4 +66,24 @@ test('should return an error if the order does not exist', async () => {
       orderId: new mongoose.Types.ObjectId(),
     })
     .expect(400);
+});
+
+test('should return an error if the order does not belong the user who is requesting', async () => {
+  const order = Order.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    userId: new mongoose.Types.ObjectId().toHexString(),
+    status: OrderStatus.Created,
+    price: 10,
+    version: 0,
+  });
+  await order.save();
+
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', global.signin())
+    .send({
+      token: 'token',
+      orderId: order.id,
+    })
+    .expect(401);
 });
