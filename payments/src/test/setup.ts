@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { environment } from "../environment";
 
 declare global {
-  var signin: () => string[];
+  var signin: (id?: string) => string[];
 }
 
 let mongo: any;
@@ -33,9 +33,9 @@ afterAll(() => {
   mongoose.connection.close();
 });
 
-global.signin = () => {
+global.signin = (id: string = new mongoose.Types.ObjectId().toHexString()) => {
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id,
     email: "email@email.com"
   };
 
