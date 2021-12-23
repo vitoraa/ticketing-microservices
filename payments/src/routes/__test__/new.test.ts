@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
+import mongoose from 'mongoose';
 
 test('should have a route handler listening to api/payments for post request', async () => {
   const response = await request(app)
@@ -51,5 +52,16 @@ test('should return an error if an invalid payment is provided', async () => {
     .post('/api/payments')
     .set('Cookie', cookie)
     .send({})
+    .expect(400);
+});
+
+test('should return an error if the order does not exist', async () => {
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', global.signin())
+    .send({
+      token: 'token',
+      orderId: new mongoose.Types.ObjectId(),
+    })
     .expect(400);
 });
