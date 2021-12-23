@@ -1,4 +1,4 @@
-import { NotAuthorizedError, requireAuth, validateRequest } from '@vitoraatickets/common';
+import { BadRequestError, NotAuthorizedError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Order } from '../models/order';
@@ -12,14 +12,19 @@ router.post('/api/payments', requireAuth,
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.body.orderId);
+    const { token, orderId } = req.body;
+    const order = await Order.findById(orderId);
 
     if (!order) {
-      throw new Error('Order not found');
+      throw new NotFoundError();
     }
 
     if (order.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
+    }
+
+    if (order.status === OrderStatus.Cancelled) {
+      throw new BadRequestError('Not possible to pay for a cancelled order');
     }
 
     res.send({});
