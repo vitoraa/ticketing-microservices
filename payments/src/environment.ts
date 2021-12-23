@@ -5,5 +5,6 @@ export const environment = {
   nats_url: process.env.NATS_URL || 'http://nats-srv:4222',
   nats_client_id: process.env.NATS_CLIENT_ID || 'asdff',
   nats_cluster_id: process.env.NATS_CLUSTER_ID || 'ticketing',
-  queue_group_name: 'payments-service'
+  queue_group_name: 'payments-service',
+  stripe_key: process.env.STRIPE_KEY || 'sk_test_51HXqQZqZ9ZQZ9ZqZ9ZqZ9ZqZ9ZqZ9ZqZ',
 };
