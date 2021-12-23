@@ -26,3 +26,30 @@ test('should returns status other than 401 if the user is signed in', async () =
 
   expect(response.status).not.toEqual(401);
 });
+
+test('should return an error if an invalid payment is provided', async () => {
+  const cookie = global.signin();
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', cookie)
+    .send({
+      token: '',
+      orderId: 'orderid'
+    })
+    .expect(400);
+
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', cookie)
+    .send({
+      token: 'token',
+      orderId: ''
+    })
+    .expect(400);
+
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', cookie)
+    .send({})
+    .expect(400);
+});
