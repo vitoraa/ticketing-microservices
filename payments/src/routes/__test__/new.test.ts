@@ -65,7 +65,7 @@ test('should return an error if the order does not exist', async () => {
       token: 'token',
       orderId: new mongoose.Types.ObjectId(),
     })
-    .expect(400);
+    .expect(404);
 });
 
 test('should return an error if the order does not belong the user who is requesting', async () => {
@@ -86,4 +86,24 @@ test('should return an error if the order does not belong the user who is reques
       orderId: order.id,
     })
     .expect(401);
+});
+
+test('should return an error if the order is cancelled', async () => {
+  const order = Order.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    userId: new mongoose.Types.ObjectId().toHexString(),
+    status: OrderStatus.Cancelled,
+    price: 10,
+    version: 0,
+  });
+  await order.save();
+
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', global.signin(order.userId))
+    .send({
+      token: 'token',
+      orderId: order.id,
+    })
+    .expect(400);
 });
