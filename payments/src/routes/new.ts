@@ -1,4 +1,4 @@
-import { requireAuth, validateRequest } from '@vitoraatickets/common';
+import { NotAuthorizedError, requireAuth, validateRequest } from '@vitoraatickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Order } from '../models/order';
@@ -16,6 +16,10 @@ router.post('/api/payments', requireAuth,
 
     if (!order) {
       throw new Error('Order not found');
+    }
+
+    if (order.userId !== req.currentUser!.id) {
+      throw new NotAuthorizedError();
     }
 
     res.send({});
