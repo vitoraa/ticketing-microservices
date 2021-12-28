@@ -4,6 +4,15 @@ const NewTicket = () => {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
 
+  const onBlur = () => {
+    const value = parseFloat(price);
+
+    if (isNaN(value)) {
+      return;
+    }
+
+    setPrice(value.toFixed(2));
+  };
   return (
     <div>
       <h1>Create a Ticket</h1>
@@ -14,7 +23,7 @@ const NewTicket = () => {
         </div>
         <div className="form-group">
           <label>Price</label>
-          <input value={price} onChange={(e) => setPrice(e.target.value)} className="form-control" />
+          <input value={price} onChange={(e) => setPrice(e.target.value)} onBlur={onBlur} className="form-control" />
         </div>
         <button className="btn btn-primary">Submit</button>
       </form>
