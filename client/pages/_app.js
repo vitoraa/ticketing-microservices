@@ -6,8 +6,11 @@ const App = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component currentUser={currentUser} {...pageProps} />
-    </div>)
+      <div className='container'>
+        <Component currentUser={currentUser} {...pageProps} />
+      </div>
+    </div>
+  )
 };
 
 App.getInitialProps = async (appContext) => {
