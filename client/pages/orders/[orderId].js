@@ -16,10 +16,12 @@ const OrderShow = ({ order }) => {
     }
   }, []);
 
+  if (timeLeft < 0) {
+    return <div>Order expired</div>
+  }
+
   return (
-    <div>
-      Time left to pay: {timeLeft} seconds
-    </div>
+    <div>Time left to pay: {timeLeft} seconds</div>
   );
 }
 
