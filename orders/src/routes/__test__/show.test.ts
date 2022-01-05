@@ -36,14 +36,14 @@ test('should returns status other than 401 if the user is signed in', async () =
   expect(response.status).not.toEqual(401);
 });
 
-test('should return 404 if the order does not exist or not authorized', async () => {
+test('should return 400 if the order does not exist or not authorized', async () => {
   const cookie = global.signin();
   const response = await request(app)
     .get('/api/orders/id')
     .set('Cookie', cookie)
     .send({})
 
-  expect(response.status).toEqual(404);
+  expect(response.status).toEqual(400);
 });
 
 test('should return the order of the user', async () => {
@@ -95,7 +95,7 @@ test('should return the order of the user', async () => {
   expect(response.body.ticket.price).toEqual(10);
 });
 
-test('should return error 404 if user try to get order of another user', async () => {
+test('should return error 401 if user try to get order of another user', async () => {
   const user1 = global.signin();
   const user2 = global.signin();
 
@@ -116,5 +116,5 @@ test('should return error 404 if user try to get order of another user', async (
     .send({})
 
 
-  expect(response.status).toEqual(404);
+  expect(response.status).toEqual(401);
 });

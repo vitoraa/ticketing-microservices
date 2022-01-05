@@ -9,6 +9,7 @@ import { TicketUpdatedListener } from './events/listeners/ticket-updated-listene
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
+  console.log('Starting....');
   try {
     await natsWrapper.connect(environment.nats_cluster_id, environment.nats_client_id, environment.nats_url);
     natsWrapper.client.on('close', () => {

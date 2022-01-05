@@ -7,6 +7,7 @@ import { OrderCreatedListener } from './events/listeners/order-created-listener'
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
+  console.log('Starting up...');
   try {
     await natsWrapper.connect(environment.nats_cluster_id, environment.nats_client_id, environment.nats_url);
     natsWrapper.client.on('close', () => {
