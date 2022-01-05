@@ -8,7 +8,7 @@ test('should returns 200 and the current user on successful get current user', a
     .get('/api/users/current_user')
     .set('Cookie', cookie)
     .send({})
-    .expect(200);
+    .expect(400);
 
   expect(response.body.currentUser.email).toEqual('email@email.com');
 });
