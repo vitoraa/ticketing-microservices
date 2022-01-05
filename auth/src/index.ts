@@ -4,7 +4,7 @@ import { app } from './app';
 import { environment } from './environment';
 
 const start = async () => {
-  console.log('Starting up...');
+  console.log('Starting up....');
   try {
     await mongoose.connect(environment.mongo_uri);
     console.log('Connected to MongoDB')
