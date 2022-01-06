@@ -3,7 +3,7 @@ import axios from "axios";
 const buildClient = ({ req }) => {
   if (typeof window === 'undefined') {
     return axios.create({
-      baseURL: 'www.vitorticket.xyz',
+      baseURL: 'http://www.vitorticket.xyz/',
       headers: req.headers
     });
   } else {
